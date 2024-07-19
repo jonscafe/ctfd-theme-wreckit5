@@ -1,0 +1,52 @@
+.jumbotron {
+    background-color: #212121;
+    color: #3CF7E2;
+}
+select.form-control {
+    height: auto!important;
+}
+.custom-select {
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23030B10' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px!important;
+}
+.card {
+    border-radius: 0!important;
+}
+#score-graph {
+    min-height: 400px;
+    background-color: transparent; /* Ubah menjadi transparan */
+    display: block;
+    clear: both;
+    color: #3CF7E2;
+}
+#solves-graph {
+    display: block;
+    background-color: transparent; /* Ubah menjadi transparan */
+    height: 350px;
+    color: #3CF7E2;
+}
+#categories-pie-graph {
+    min-height: 400px;
+    display: block;
+    background-color: transparent; /* Ubah menjadi transparan */
+    color: #3CF7E2;
+}
+#keys-pie-graph {
+    min-height: 400px;
+    background-color: transparent; /* Ubah menjadi transparan */
+    display: block;
+    color: #3CF7E2;
+}
+.form-control {
+    position: relative;
+    display: block;
+    padding: .8em!important;
+    border-radius: 0;
+    background: 0 0;
+    color: #3CF7E2;
+    font-weight: 400;
+    font-family: Avenir Next,Helvetica Neue,Helvetica,Arial,sans-serif;
+    -webkit-appearance: none;
+    height: auto!important;
+}
+
+/* page users, text name */
