@@ -22,7 +22,7 @@ This theme is derived from **[Watchdog from APT-42 CTF](https://github.com/apt-4
   
   3. **Configure the theme in: Admin Panel > Configuration > Theme**
 
-##Preview
+## Preview
 ![image](https://github.com/user-attachments/assets/8f2084d5-b89e-4c0d-85e7-9e9fe5f16739)
 ![image](https://github.com/user-attachments/assets/92924532-2dcb-4551-8e09-3b2bdb673382)
 ![image](https://github.com/user-attachments/assets/7e510a85-103f-4dce-bad8-ae021ba07167)
