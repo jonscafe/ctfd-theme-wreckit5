@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ Configs.ctf_name }}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="{{ Configs.ctf_small_icon }}" type="image/x-icon">
+	<!-- <link rel="stylesheet" href="{{ url_for('views.themes', path='css/fonts.css') }}"> -->
+	<link rel="stylesheet" href="{{ url_for('views.themes', path='css/main.css') }}">
+	<link rel="stylesheet" href="{{ url_for('views.themes', path='css/apt42.css') }}">
+	<style>
+		.navbar-glass {
+			background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+			backdrop-filter: blur(10px); /* Adjust the blur amount as needed */
+		}
+		body {
+			background-image: url('files/asset/bg.png');
+			background-size: cover;
+		}
+		.footer a {
+			color: #3CF7E2; /* Set the text color */
+			text-shadow: 0 0 10px #3CF7E2; /* Add glow effect */
+		}
+	</style>	
+	{% block stylesheets %}
+	{% endblock %}
+
+	{{ Plugins.styles }}
+	<script type="text/javascript">
+		var init = {
+			'urlRoot': "{{ request.script_root }}",
+			'csrfNonce': "{{ Session.nonce }}",
+			'userMode': "{{ Configs.user_mode }}",
+			'userId': {{ Session.id }},
+			'start': {{ Configs.start | tojson }},
+			'end': {{ Configs.end | tojson }},
+			'theme_settings': {{ Configs.theme_settings | tojson }}
+		}
+	</script>
+	{{ Configs.theme_header }}
+</head>
+<body>
+	{% include "components/navbar.html" %}
+
+	<main role="main">
+		{% block content %}
+		{% endblock %}
+	</main>
+	<footer class="footer">
+		<div class="container text-center">
+			<a href="https://ctfd.io"><small>Powered by CTFd</small></a>
+				<small class="">||</small>
+			<a href="https://github.com/jonscafe"><small>Wreck IT 5.0 theme by k.eii</small></a>
+		</div>	
+	</footer>
+
+	<script defer src="{{ url_for('views.themes', path='js/vendor.bundle.js') }}"></script>
+	<script defer src="{{ url_for('views.themes', path='js/core.js') }}"></script>
+	<script defer src="{{ url_for('views.themes', path='js/helpers.js') }}"></script>
+
+	{% block entrypoint %}
+	<script defer src="{{ url_for('views.themes', path='js/pages/main.js') }}"></script>
+	{% endblock %}
+
+	{% block scripts %}
+	{% endblock %}
+
+	{{ Plugins.scripts }}
+
+	{{ Configs.theme_footer }}
+</body>
+</html>

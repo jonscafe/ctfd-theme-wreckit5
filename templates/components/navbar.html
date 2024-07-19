@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+        .sidenav {
+            height: 100%;
+            width: 0; /* Start with the sidebar closed */
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+            backdrop-filter: blur(10px); /* Adjust the blur amount as needed */
+            overflow-x: hidden;
+            transition: 0.8s;
+            padding-top: 80px;
+        }
+        .sidenav a {
+            padding: 8px 8px 8px 16px;
+            text-decoration: none;
+            font-size: 14px; /* Adjust the font size */
+            color: white;
+            display: block;
+            transition: 0.3s; /* Smooth transition for hover effect */
+        }
+        .sidenav a:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Lighten background on hover */
+            color: #f1f1f1; /* Lighten text color on hover */
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .navbar-toggler-icon {
+            position: fixed; /* Fixed position for the toggle button */
+            top: 20px;
+            left: 10px;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .navbar-toggler-icon i {
+            color: white;
+        }
+        .navbar-toggler {
+            position: fixed; /* Fixed position for the toggle button */
+            top: 15px; /* Adjust top position */
+            left: 15px; /* Adjust left position */
+            z-index: 2;
+        }
+        .ctf_logo {
+            display: block;
+            margin: 0 auto 10px auto; /* Center the logo and add some bottom margin */
+            width: 100%;
+            transition: filter 0.3s; /* Smooth transition for hover effect */
+        }
+        .ctf_logo:hover {
+            filter: invert(100%); /* Invert colors on hover */
+        }
+        .spacer {
+            height: 20px; /* Adjust the height of the space */
+        }
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 10px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar-toggler-icon" onclick="openNav()">
+        <i class="fas fa-bars" style="font-size:24px;"></i>
+    </div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="{{ url_for('views.static_html', route='/') }}">
+            {% if Configs.ctf_logo %}
+                <img class="img-responsive ctf_logo" src="{{ url_for('views.files', path=Configs.ctf_logo) }}" height="30" alt="{{ Configs.ctf_name }}">
+            {% else %}
+                <i class="fas fa-home"></i> {{ Configs.ctf_name }}
+            {% endif %}
+        </a>
+        <div class="spacer"></div> <!-- This adds space between the logo and the links -->
+        <a href="{{ url_for('views.static_html', route='/') }}"></a>
+        {% if authed() %}
+            <a href="{{ url_for('users.listing') }}"><i class="fas fa-user"></i> Users</a>
+            {% if Configs.user_mode == 'teams' %}
+                <a href="{{ url_for('teams.listing') }}"><i class="fas fa-users"></i> Teams</a>
+            {% endif %}
+            <a href="{{ url_for('scoreboard.listing') }}"><i class="fas fa-trophy"></i> Scoreboard</a>
+            <a href="{{ url_for('challenges.listing') }}"><i class="fas fa-tasks"></i> Challenges</a>
+            {% if is_admin() %}
+                <a href="{{ url_for('admin.view') }}"><i class="fas fa-wrench"></i> Admin Panel</a>
+            {% endif %}
+            <a href="{{ url_for('views.notifications') }}"><i class="fas fa-bell"></i> Notifications</a>
+            {% if Configs.user_mode == "teams" %}
+                <a href="{{ url_for('teams.private') }}"><i class="fas fa-users"></i> Team</a>
+            {% endif %}
+            <a href="{{ url_for('users.private') }}"><i class="fas fa-user-circle"></i> Profile</a>
+            <a href="{{ url_for('views.settings') }}"><i class="fas fa-cogs"></i> Settings</a>
+            <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+            {% if registration_visible() %}
+                <a href="{{ url_for('auth.register') }}"><i class="fas fa-user-plus"></i> Register</a>
+            {% endif %}
+            <a href="{{ url_for('auth.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "200px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+import $ from "jquery";
+import echarts from "echarts/dist/echarts-en.common";
+import dayjs from "dayjs";
+import { cumulativeSum, colorHash } from "./utils";
+
+const graph_configs = {
+  score_graph: {
+    format: (type, id, name, _account_id, responses) => {
+      let option = {
+        title: {
+          left: "center",
+          text: "Score over Time",
+          textStyle: {
+            color: "#3CF7E2" // Warna teks judul
+          }
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "cross"
+          },
+          textStyle: {
+            color: "#3CF7E2" // Warna teks tooltip
+          }
+        },
+        legend: {
+          type: "scroll",
+          orient: "horizontal",
+          align: "left",
+          bottom: 0,
+          data: [name],
+          textStyle: {
+            color: "#3CF7E2" // Warna teks legenda
+          }
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {
+              backgroundColor: "#212121",
+              textStyle: {
+                color: "#3CF7E2" // Warna teks toolbox
+              }
+            }
+          }
+        },
+        grid: {
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: "category",
+            boundaryGap: false,
+            data: [],
+            axisLine: {
+              lineStyle: {
+                color: "#3CF7E2" // Warna garis sumbu x
+              }
+            },
+            axisLabel: {
+              color: "#3CF7E2" // Warna label sumbu x
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: "value",
+            axisLine: {
+              lineStyle: {
+                color: "#3CF7E2" // Warna garis sumbu y
+              }
+            },
+            axisLabel: {
+              color: "#3CF7E2" // Warna label sumbu y
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#3CF7E2" // Warna garis grid
+              }
+            }
+          }
+        ],
+        dataZoom: [
+          {
+            id: "dataZoomX",
+            type: "slider",
+            xAxisIndex: [0],
+            filterMode: "filter",
+            height: 20,
+            top: 35,
+            fillerColor: "rgba(255, 255, 255)"
+          }
+        ],
+        series: []
+      };
+
+      const times = [];
+      const scores = [];
+      const solves = responses[0].data;
+      const awards = responses[2].data;
+      const total = solves.concat(awards);
+
+      total.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
+
+      for (let i = 0; i < total.length; i++) {
+        const date = dayjs(total[i].date);
+        times.push(date.toDate());
+        try {
+          scores.push(total[i].challenge.value);
+        } catch (e) {
+          scores.push(total[i].value);
+        }
+      }
+
+      times.forEach(time => {
+        option.xAxis[0].data.push(time);
+      });
+
+      option.series.push({
+        name: window.stats_data.name,
+        type: "line",
+        label: {
+          normal: {
+            show: true,
+            position: "top",
+            color: "#3CF7E2" // Warna label pada garis
+          }
+        },
+        lineStyle: {
+          normal: {
+            color: "#3CF7E2" // Warna garis grafik
+          }
+        },
+        areaStyle: {
+          normal: {
+            color: colorHash(name + id)
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: colorHash(name + id)
+          }
+        },
+        data: cumulativeSum(scores)
+      });
+      return option;
+    }
+  },
+
+  category_breakdown: {
+    format: (type, id, name, account_id, responses) => {
+      let option = {
+        title: {
+          left: "center",
+          text: "Category Breakdown",
+          textStyle: {
+            color: "#3CF7E2" // Warna teks judul
+          }
+        },
+        tooltip: {
+          trigger: "item",
+          textStyle: {
+            color: "#3CF7E2" // Warna teks tooltip
+          }
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              backgroundColor: "#212121",
+              textStyle: {
+                color: "#3CF7E2" // Warna teks toolbox
+              }
+            }
+          }
+        },
+        legend: {
+          type: "scroll",
+          orient: "vertical",
+          top: "middle",
+          right: 0,
+          data: [],
+          textStyle: {
+            color: "#3CF7E2" // Warna teks legenda
+          }
+        },
+        series: [
+          {
+            name: "Category Breakdown",
+            type: "pie",
+            radius: ["30%", "50%"],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: "center"
+            },
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  formatter: function(data) {
+                    return `${data.percent}% (${data.value})`;
+                  },
+                  color: "#3CF7E2" // Warna label item
+                },
+                labelLine: {
+                  show: true,
+                  lineStyle: {
+                    color: "#3CF7E2" // Warna garis label
+                  }
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  position: "center",
+                  textStyle: {
+                    fontSize: "14",
+                    fontWeight: "normal",
+                    color: "#3CF7E2" // Warna teks saat fokus
+                  }
+                }
+              }
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: "30",
+                fontWeight: "bold",
+                color: "#3CF7E2" // Warna teks saat fokus
+              }
+            },
+            labelLine: {
+              show: false,
+              lineStyle: {
+                color: "#3CF7E2" // Warna garis label
+              }
+            },
+            data: []
+          }
+        ]
+      };
+      const solves = responses[0].data;
+      const categories = [];
+
+      for (let i = 0; i < solves.length; i++) {
+        categories.push(solves[i].challenge.category);
+      }
+
+      const keys = categories.filter((elem, pos) => {
+        return categories.indexOf(elem) == pos;
+      });
+
+      const counts = [];
+      for (let i = 0; i < keys.length; i++) {
+        let count = 0;
+        for (let x = 0; x < categories.length; x++) {
+          if (categories[x] == keys[i]) {
+            count++;
+          }
+        }
+        counts.push(count);
+      }
+
+      keys.forEach((category, index) => {
+        option.legend.data.push(category);
+        option.series[0].data.push({
+          value: counts[index],
+          name: category,
+          itemStyle: { color: colorHash(category) }
+        });
+      });
+
+      return option;
+    }
+  },
+
+  solve_percentages: {
+    format: (type, id, name, account_id, responses) => {
+      const solves_count = responses[0].data.length;
+      const fails_count = responses[1].meta.count;
+      let option = {
+        title: {
+          left: "center",
+          text: "Solve Percentages",
+          textStyle: {
+            color: "#3CF7E2" // Warna teks toolbox
+          }
+        },
+        tooltip: {
+          trigger: "item",
+          textStyle: {
+            color: "#3CF7E2" // Warna teks toolbox
+          }
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              backgroundColor: "#212121",
+              textStyle: {
+                color: "#3CF7E2" // Warna teks toolbox
+              }
+            }
+          }
+        },
+        legend: {
+          orient: "vertical",
+          top: "middle",
+          right: 0,
+          data: ["Fails", "Solves"],
+          textStyle: {
+            color: "#3CF7E2" // Warna teks toolbox
+          }
+        },
+        series: [
+          {
+            name: "Category Breakdown",
+            type: "pie",
+            radius: ["30%", "50%"],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: "center"
+            },
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  formatter: function(data) {
+                    return `${data.percent}% (${data.value})`;
+                  },
+                  color: "#3CF7E2" // Warna label item
+                },
+                labelLine: {
+                  show: true,
+                  lineStyle: {
+                    color: "#3CF7E2" // Warna garis label
+                  }
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  position: "center",
+                  textStyle: {
+                    fontSize: "14",
+                    fontWeight: "normal",
+                    color: "#3CF7E2" // Warna teks saat fokus
+                  }
+                }
+              }
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: "30",
+                fontWeight: "bold",
+                color: "#3CF7E2" // Warna teks saat fokus
+              }
+            },
+            labelLine: {
+              show: false,
+              lineStyle: {
+                color: "#3CF7E2" // Warna garis label
+              }
+            },
+            data: []
+          }
+        ]
+      };
+
+      return option;
+    }
+  }
+};
+
+export function createGraph(
+  graph_type,
+  target,
+  data,
+  type,
+  id,
+  name,
+  account_id
+) {
+  const cfg = graph_configs[graph_type];
+  let chart = echarts.init(document.querySelector(target));
+  chart.setOption(cfg.format(type, id, name, account_id, data));
+  $(window).on("resize", function() {
+    if (chart != null && chart != undefined) {
+      chart.resize();
+    }
+  });
+}
+
+export function updateGraph(
+  graph_type,
+  target,
+  data,
+  type,
+  id,
+  name,
+  account_id
+) {
+  const cfg = graph_configs[graph_type];
+  let chart = echarts.init(document.querySelector(target));
+  chart.setOption(cfg.format(type, id, name, account_id, data));
+}
+
+export function disposeGraph(target) {
+  echarts.dispose(document.querySelector(target));
+}

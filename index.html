@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!-- #buat halaman index pertama ctfd, input sendiri lewat konfigurasi pages -->
+
+<html lang="en">
+<head>
+    <style>
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'SOLVAST';
+            src: url('/files/45077cae45e2b5b3a26f2ffe262b37fb/SOLVAST.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        header, footer {
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            background-color: transparent; /* Transparent background color for header and footer */
+            color: #fff; /* Text color for header and footer */
+            margin: 0 auto;
+        }
+
+        header img, footer img {
+            max-width: 100%; /* Ensure images fit within their containers */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Remove extra spacing */
+            margin: 0 auto; /* Center images horizontally */
+            max-height: 70px; /* Max height for header and footer images */
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center; /* Center-align content */
+        }
+
+        .content img {
+            max-width: 100%; /* Ensure images fit within their containers */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Remove extra spacing */
+            margin: 0 auto; /* Center images horizontally */
+            max-height: 500px; /* Max height for content images */
+        }
+
+        .content h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .wreck-it-link {
+            display: inline-block;
+            background-image: url('/files/asset/lets.png'); /* Replace with your bitmap.png path */
+            width: 100%; /* Adjust dimensions to fill container */
+            padding-top: 30px; /* Adjust padding for vertical centering */
+            padding-bottom: 30px; /* Adjust padding for vertical centering */
+            background-size: contain; /* Ensure the image fits within the hyperlink */
+            background-repeat: no-repeat; /* Prevent background image from repeating */
+            background-position: center center; /* Center the background image */
+            text-indent: -9999px; /* Hide text */
+            color: transparent; /* Hide any text that might appear */
+            transition: filter 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .wreck-it-link:hover {
+            filter: invert(100%); /* Invert colors on hover */
+        }
+    </style>
+</head>
+<body>
+    <header><img src="/files/asset/header.png" alt="Header Image"></header>
+
+    <div class="content">
+        <img src="/files/asset/wreckit.png" alt="Wreck It Image">
+        <a href="/challenges" class="wreck-it-link">Let's Wreck IT!</a>
+    </div>
+
+    <footer><img src="/files/asset/footer.png" alt="Footer Image"></footer>
+</body>
+</html>
